@@ -45,13 +45,19 @@ pipeline {
         }
 
         stage('Kubernetes Deployment of ASG Bugg Web Application') {
-            steps {
-                echo '=== Deploying to Kubernetes ==='
+    steps {
+        script {
+            echo '=== Deploying to Kubernetes ==='
+            try {
                 withKubeConfig([credentialsId: 'kubelogin']) {
                     sh('kubectl delete all --all -n devsecops')
                     sh('kubectl apply -f deployment.yaml --namespace=devsecops')
                 }
+            } catch (Exception e) {
+                echo "Error deploying to Kubernetes: ${e.message}"
+                currentBuild.result = 'FAILURE'
+                error("Failed to deploy to Kubernetes.")
             }
         }
     }
-}
+ }
