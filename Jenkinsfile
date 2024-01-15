@@ -3,7 +3,6 @@ pipeline {
   tools { 
         maven 'Maven_3_5_2'  
     }
-   stages{
     stages{
     stage('CompileandRunSonarAnalysis') {
             steps {	
