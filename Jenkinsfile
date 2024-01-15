@@ -55,6 +55,8 @@ pipeline {
                         }
                     } catch (Exception e) {
                         echo "Error deploying to Kubernetes: ${e.message}"
+                        sh 'kubectl get pods --namespace=devsecops'  // Add this line to get pod information
+                        sh 'kubectl get events --namespace=devsecops'  // Add this line to get Kubernetes events
                         currentBuild.result = 'FAILURE'
                         error("Failed to deploy to Kubernetes.")
                     }
